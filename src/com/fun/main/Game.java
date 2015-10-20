@@ -9,7 +9,7 @@ import java.util.Random;
 public class Game extends Canvas implements Runnable{
 	
 	/**
-	 *heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy 
+	 *hay 
 	 */
 	private static final long serialVersionUID = -3455993984557691404L;
 	public static final int WIDTH= 720, HEIGHT = 480;
