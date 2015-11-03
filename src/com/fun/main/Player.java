@@ -174,8 +174,12 @@ public class Player extends GameObject{
 	
 	public void tryJump()
 	{
+		if (numJumps<2)
+		{
 		tryJump=16;
 		activeJump=true;
+		numJumps++;
+		}
 	}
 
 
