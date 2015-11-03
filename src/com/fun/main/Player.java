@@ -11,6 +11,7 @@ public class Player extends GameObject{
 	private boolean activeJump=false;
 	private boolean jolted= false;
 	private Handler handler;
+	private int numJumps = 0;
 	public Player(int x, int y, ID id, Handler handler) {
 		super(x, y, id);
 		// TODO Auto-generated constructor stub
@@ -58,7 +59,8 @@ public class Player extends GameObject{
 					activeJump=true;
 					jolted=true;
 					tryJump=16;
-					HUD.SCORE+=10;
+					if(HUD.SCORE>0)
+						HUD.SCORE-=10;
 				}
 			}
 
@@ -78,6 +80,7 @@ public class Player extends GameObject{
 					velY=velY/2;
 					activeJump=false;
 					intersectsWall=true;
+					numJumps = 0;
 				}
 			}
 			

@@ -21,6 +21,8 @@ public class Level1 {
 		handler.addObject(new BasicWall(WIDTH-300, (int) ((int) HEIGHT/1.5), ID.Wall, 100,400));
 		handler.addObject(new BasicWall(0, HEIGHT-100, ID.Wall, 720,400));
 		handler.addObject(new BasicWall(WIDTH-100, (int) ((int) HEIGHT/2), ID.Wall, 100,100));
+		handler.addObject(new BasicEnemy(50, 50, ID.Enemy, handler));
+		handler.addObject(new BasicBlueEnemy(55,55, ID.Enemy, handler));
 	}
 	public KeyInput returnKeyInput(){
 		return new KeyInput(handler);
