@@ -78,9 +78,14 @@ public class Player extends GameObject{
 					jolted=false;
 					velX=velX/2;
 					velY=velY/2;
-					activeJump=false;
 					intersectsWall=true;
-					numJumps = 0;
+					activeJump=false;
+					if (tempObject.getY()>y)
+					{
+						numJumps = 0;
+					}
+					//System.out.println(tempObject.getY() + " " + y);
+					//System.out.println(tempObject.getX() + " " + x);
 				}
 			}
 			
