@@ -8,10 +8,12 @@ import java.util.Random;
 public class Player extends GameObject{
 	Random r = new Random();
 	private int tryJump= 0;
-	private boolean activeJump=false;
+	public boolean activeJump=false;
 	private boolean jolted= false;
 	private Handler handler;
 	private int numJumps = 0;
+	private int numHeadbangs = 0;
+	public boolean onGround;
 	public Player(int x, int y, ID id, Handler handler) {
 		super(x, y, id);
 		// TODO Auto-generated constructor stub
@@ -29,6 +31,10 @@ public class Player extends GameObject{
 		x= Game.clamp(x, 0, Game.WIDTH-48);
 		y= Game.clamp(y,0, Game.HEIGHT-32);
 		velX= Game.clamp(velX, -32, 32);
+		if (velY==0)
+		{
+		//	velY++;
+		}
 		if (y<= 0 || y >= Game.HEIGHT) 
 		{
 			velY*=0;
@@ -42,6 +48,30 @@ public class Player extends GameObject{
 		{
 			velY=-tryJump;
 			tryJump--;
+		}
+		boolean intersectsSomething=false;
+		for (int i=0; i<handler.object.size(); i++)
+		{
+			GameObject tempObject = handler.object.get(i);
+			
+				if (getBounds().intersects(tempObject.getBounds())&&tempObject.getID()!=ID.Player)
+				{
+					intersectsSomething=true;
+					//onGround=true;
+					if (tryJump<=-16&&onGround==false)
+					{
+						velY++;
+					}
+				}
+
+		}
+		if (intersectsSomething==true)
+		{
+			System.out.println("intersectsSomething is true");
+			if (tryJump<=-16&&onGround==false)
+			{
+				velY++;
+			}
 		}
 		//System.out.println("Hi" + velX);
 	}
@@ -66,29 +96,88 @@ public class Player extends GameObject{
 
 			if (tempObject.getID()== ID.Wall)
 			{
+				int adjustedVelY=velY;
+				Rectangle anticipate;
+				if (velY==0)
+				{
+					adjustedVelY = -1;
+				}
+				anticipate= new Rectangle(x+velX,y+adjustedVelY,32,32);
+				if (anticipate.intersects(tempObject.getBounds()))
+				{
+					while (anticipate.intersects(tempObject.getBounds()))
+					{
+						anticipate= new Rectangle(x+velX,y+velY,32,32);
+						jolted=false;
+						velX=velX/2;
+						velY=velY/2;
+						intersectsWall=true;
+						activeJump=false;
+						onGround = true;
+						if (tempObject.getY()<y)
+						{
+							numJumps = 0;
+							numHeadbangs = 0;
+						}
+						
+						//else if (tempObject.getY()>y && tempObject.getX()<=x && tempObject.getX()+tempObject.getBounds().getWidth()>=x)
+						//System.out.println(tempObject.getY() + " " + y);
+						//System.out.println(tempObject.getX() + " " + x);
+						//onGround=true;
+						//else {
+							
+						//}
+						if (onGround == true)
+						{
+							numJumps = 0;
+						}
+					}
+					//onGround=false;
+				}
+			}
+			
+			if (tempObject.getID()== ID.MovingWall)
+			{
 				Rectangle anticipate;
 				if (velY==0)
 				{
 					//velY=1;
 				}
 				anticipate= new Rectangle(x+velX,y+velY,32,32);
-				while (anticipate.intersects(tempObject.getBounds()))
+				if(anticipate.intersects(tempObject.getBounds()))
 				{
-					anticipate= new Rectangle(x+velX,y+velY,32,32);
-					jolted=false;
-					velX=velX/2;
-					velY=velY/2;
-					intersectsWall=true;
-					activeJump=false;
-					if (tempObject.getY()>y)
+					while (anticipate.intersects(tempObject.getBounds()))
 					{
-						numJumps = 0;
+						anticipate= new Rectangle(x+velX,y+velY,32,32);
+						jolted=false;
+						velX=velX/2;
+						velY=velY/2;
+						x+=tempObject.getVelX();
+						y+=tempObject.getVelY();			
+						intersectsWall=true;
+						activeJump=false;
+						if (tempObject.getY()>y && (tempObject.getX()<x && (tempObject.getX()+x)>x))
+						{
+							velY = tempObject.getVelY();
+							//velX = tempObject.getVelX();
+							numJumps = 0;
+						}
+						else if (tempObject.getY()<y && (tempObject.getX()>x || (tempObject.getX()+x)<x))
+						{
+							velX = tempObject.getVelX();
+						}
+						else if (tempObject.getY()<y && (tempObject.getX()<x && (tempObject.getX()+x)>x))
+						{
+							velY = tempObject.getVelY();
+							velX = tempObject.getVelX();
+							numJumps = 0;
+						}
+						//System.out.println(tempObject.getY() + " " + y);
+						//System.out.println(tempObject.getX() + " " + x);
 					}
-					//System.out.println(tempObject.getY() + " " + y);
-					//System.out.println(tempObject.getX() + " " + x);
+				tryJump = 0;
 				}
 			}
-			
 		}
 		if (intersectsWall==false&&velY==0)
 		{
@@ -98,17 +187,30 @@ public class Player extends GameObject{
 				GameObject tempObject = handler.object.get(i);
 				if (tempObject.getID()== ID.Wall)
 				{
+					onGround = false;
 					Rectangle anticipate= new Rectangle(x,y+8,32,32);
 					if (anticipate.intersects(tempObject.getBounds()))
 					{
+						/*
+						velY=tempObject.getVelY();
+						velX= tempObject.getVelX();
+						x=x+velX;
+						y=y+velY;
+						activeJump=false;
+						*/
 						intersectCheck=true;
 					}
 				}
 				
 			}
 			if (intersectCheck==false){
-				velY=8;
-		}
+				velY=4;
+			}
+			if (intersectCheck==true)
+			{
+				
+			}
+
 		}
 		
 
@@ -116,6 +218,22 @@ public class Player extends GameObject{
 	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
+		g.setColor(Color.red);
+		if (activeJump==true)
+		{
+			g.drawString("Active Jump is true", 150, 15);
+		}
+		if (onGround==true)
+		{
+			g.drawString("onGround is true", 400, 15);
+			
+		}
+		else {
+			g.drawString("onGround is false", 400, 15);
+		}
+		g.drawString("velX: " + velX, 300, 15);
+		g.drawString("velY: " + velY, 300, 30);
+		
 		g.setColor(Color.gray);
 		int tail = 5;
 		if (activeJump==false)
