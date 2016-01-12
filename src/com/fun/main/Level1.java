@@ -23,7 +23,7 @@ public class Level1 {
 		handler.addObject(new BasicWall(WIDTH-100, (int) ((int) HEIGHT/2), ID.Wall, 100,100));
 		handler.addObject(new BasicEnemy(50, 50, ID.Enemy, handler));
 		handler.addObject(new BasicBlueEnemy(55,55, ID.Enemy, handler));
-		handler.addObject(new MovingWall(0, 70, ID.Wall, 100, 50, 500, 200, 2, handler));
+		handler.addObject(new MovingWall(0, 70, ID.MovingWall, 100, 50, 500, 200, 2, handler));
 	}
 	public KeyInput returnKeyInput(){
 		return new KeyInput(handler);

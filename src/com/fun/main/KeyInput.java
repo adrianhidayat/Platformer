@@ -19,24 +19,24 @@ public class KeyInput extends KeyAdapter{
 			{
 				if (key == KeyEvent.VK_UP)
 				{
-					System.out.println("Up pressed");
+					//System.out.println("Up pressed");
 					//tempObject.setVelY(tempObject.getVelY()-movementAmount);
 					Player tempPlayerObject = (Player) handler.object.get(i);
 					tempPlayerObject.tryJump();
 				}
 				if (key == KeyEvent.VK_DOWN)
 				{
-					System.out.println("Down pressed");
+				//	System.out.println("Down pressed");
 					tempObject.setVelY(tempObject.getVelY()+movementAmount);
 				}
 				if (key == KeyEvent.VK_LEFT)
 				{
-					System.out.println("LEFT pressed");
+				//System.out.println("LEFT pressed");
 					tempObject.setVelX(tempObject.getVelX()-movementAmount);
 				}
 				if (key == KeyEvent.VK_RIGHT)
 				{
-					System.out.println("RIGHT pressed");
+				//	System.out.println("RIGHT pressed");
 					tempObject.setVelX(tempObject.getVelX()+movementAmount);
 				}
 				if (key == KeyEvent.VK_SPACE)
